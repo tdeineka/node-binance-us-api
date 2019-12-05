@@ -1,0 +1,84 @@
+{
+  "_from": "node-binance-api@0.9.9",
+  "_id": "node-binance-api@0.9.9",
+  "_inBundle": false,
+  "_integrity": "sha512-ytn8HGpvApcHQuNWtZYjM91HoLc/aRjq34ziQwR3/IPscpL3y66x7D8wRJBByyJcvH/qPurBLXuk2IJME6bAAQ==",
+  "_location": "/node-binance-api",
+  "_phantomChildren": {
+    "async-limiter": "1.0.0",
+    "es6-promisify": "5.0.0"
+  },
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "node-binance-api@0.9.9",
+    "name": "node-binance-api",
+    "escapedName": "node-binance-api",
+    "rawSpec": "0.9.9",
+    "saveSpec": null,
+    "fetchSpec": "0.9.9"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-binance-api/-/node-binance-api-0.9.9.tgz",
+  "_shasum": "cc852dcc9ee4a545b8e7ab46d5b16a8d2228c885",
+  "_spec": "node-binance-api@0.9.9",
+  "_where": "C:\\ws\\pareto\\api1",
+  "author": {
+    "name": "Jon Eyrick",
+    "email": "social@nextlocal.net",
+    "url": "https://nextlocal.net"
+  },
+  "bugs": {
+    "url": "https://github.com/jaggedsoft/node-binance-api/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "async": "^3.1.0",
+    "https-proxy-agent": "^3.0.1",
+    "request": "^2.88.0",
+    "socks-proxy-agent": "^4.0.2",
+    "string-hash": "^1.1.3",
+    "url": "^0.11.0",
+    "ws": "^7.2.0"
+  },
+  "deprecated": false,
+  "description": "Binance API for node https://github.com/jaggedsoft/node-binance-api",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-counter": "^1.0.0",
+    "codacy-coverage": "^3.4.0",
+    "codecov": "^3.6.1",
+    "coveralls": "^3.0.7",
+    "eslint": "^6.6.0",
+    "istanbul": "^0.4.5",
+    "jsdoc": "^3.6.3",
+    "mocha": "^6.2.2",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^14.1.1"
+  },
+  "homepage": "https://github.com/jaggedsoft/node-binance-api#readme",
+  "keywords": [
+    "binance",
+    "api"
+  ],
+  "license": "MIT",
+  "main": "node-binance-api.js",
+  "name": "node-binance-api",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jaggedsoft/node-binance-api.git"
+  },
+  "scripts": {
+    "codacy": "cat ./coverage/lcov.info | codacy-coverage -v",
+    "codecov": "codecov",
+    "cover": "istanbul cover _mocha --report lcovonly",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "lint": "eslint -c .eslintrc.js node-binance-api.js test.js",
+    "test": "mocha",
+    "test-debug": "mocha --inspect-brk"
+  },
+  "version": "0.9.9"
+}
