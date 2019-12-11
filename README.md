@@ -17,12 +17,12 @@ This project is designed to help you make your own projects that interact with t
 
 #### Installation
 ```
-npm install node-binance-api --save
+npm install node-binance-us-api --save
 ```
 
 #### Getting started
 ```javascript
-const binance = require('node-binance-api')().options({
+const binance = require('node-binance-us-api')().options({
   APIKEY: '<key>',
   APISECRET: '<secret>',
   useServerTime: true // If you get timestamp errors, synchronize to server time at startup

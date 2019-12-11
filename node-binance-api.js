@@ -1,14 +1,15 @@
 /* ============================================================
- * node-binance-api
+ * node-binance-us-api
  * https://github.com/jaggedsoft/node-binance-api
+ * https://github.com/tdeineka/node-binance-us-api
  * ============================================================
  * Copyright 2017-, Jon Eyrick
  * Released under the MIT License
  * ============================================================ */
 
 /**
- * Node Binance API
- * @module jaggedsoft/node-binance-api
+ * Node Binance.US API
+ * @module tdeineka/node-binance-us-api
  * @return {object} instance to class object
  */
 let api = function Binance() {
