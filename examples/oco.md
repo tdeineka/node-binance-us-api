@@ -1,5 +1,5 @@
 ( async () => {
-  const Binance = require('node-binance-api');
+  const Binance = require('node-binance-us-api');
   const binance = new Binance({
     APIKEY: '<key>',
     APISECRET: '<secret>'

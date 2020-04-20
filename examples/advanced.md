@@ -79,7 +79,7 @@ binance.prevDay(false, (error, prevDay) => {
 
 #### Enable Test Mode for orders
 ```js
-const binance = require('node-binance-api');
+const binance = require('node-binance-us-api');
 binance.options({
   'APIKEY':'<key>',
   'APISECRET':'<secret>',

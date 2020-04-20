@@ -20,12 +20,12 @@ let api = function Binance( options = {} ) {
     const SocksProxyAgent = require( 'socks-proxy-agent' );
     const stringHash = require( 'string-hash' );
     const async = require( 'async' );
-    let base = 'https://api.binance.com/api/';
-    let wapi = 'https://api.binance.com/wapi/';
-    let sapi = 'https://api.binance.com/sapi/';
-    let fapi = 'https://fapi.binance.com/fapi/';
-    let stream = 'wss://stream.binance.com:9443/ws/';
-    let combineStream = 'wss://stream.binance.com:9443/stream?streams=';
+    let base = 'https://api.binance.us/api/';
+    let wapi = 'https://api.binance.us/wapi/';
+    let sapi = 'https://api.binance.us/sapi/';
+    let fapi = 'https://fapi.binance.us/fapi/';
+    let stream = 'wss://stream.binance.us:9443/ws/';
+    let combineStream = 'wss://stream.binance.us:9443/stream?streams=';
     const userAgent = 'Mozilla/4.0 (compatible; Node Binance API)';
     const contentType = 'application/x-www-form-urlencoded';
     Binance.subscriptions = {};
@@ -2452,10 +2452,10 @@ let api = function Binance( options = {} ) {
         /* Coming soon:
         futuresSubscribe
         Cancel multiple orders DELETE /fapi/v1/batchOrders
-        New Future Account Transfer POST https://api.binance.com/sapi/v1/futures/transfer (HMAC SHA
+        New Future Account Transfer POST https://api.binance.us/sapi/v1/futures/transfer (HMAC SHA
         Get Postion Margin Change History (TRADE)
 
-        wss://fstream.binance.com/ws/<listenKey>
+        wss://fstream.binance.us/ws/<listenKey>
         Diff. Book Depth Streams (250ms, 100ms, or realtime): <symbol>@depth OR <symbol>@depth@100ms OR <symbol>@depth@0ms
         Partial Book Depth Streams (5, 10, 20): <symbol>@depth<levels> OR <symbol>@depth<levels>@100ms
         All Market Liquidation Order Streams: !forceOrder@arr
