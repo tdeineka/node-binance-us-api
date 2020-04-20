@@ -1,46 +1,151 @@
-
-[![Latest Version](https://img.shields.io/github/release/tdeineka/node-binance-us-api.svg?style=flat-square)](https://github.com/tdeineka/node-binance-us-api/releases)
-[![GitHub last commit](https://img.shields.io/github/last-commit/tdeineka/node-binance-us-api.svg?maxAge=2400)](#)
-[![npm downloads](https://img.shields.io/npm/dt/node-binance-api.svg?maxAge=7200)](https://www.npmjs.com/package/node-binance-api)
-[![jaggedsoft on Twitter](https://img.shields.io/twitter/follow/jaggedsoft.svg?style=social)](https://twitter.com/jaggedsoft)
+[![Latest Version](https://img.shields.io/github/release/jaggedsoft/node-binance-api.svg?style=flat-square)](https://github.com/jaggedsoft/node-binance-api/releases) [![GitHub last commit](https://img.shields.io/github/last-commit/jaggedsoft/node-binance-api.svg?maxAge=2400)](#) [![Downloads](https://img.shields.io/npm/dm/node-binance-api.svg?labelColor=blueviolet)](https://npm-stat.com/charts.html?package=node-binance-api&from=2017-07-01&to=2020-04-01)<!-- [![npm downloads](https://img.shields.io/npm/dt/node-binance-api.svg?maxAge=7200)](https://www.npmjs.com/package/node-binance-api) --> [![jaggedsoft on Twitter](https://img.shields.io/twitter/follow/jaggedsoft.svg?style=social)](https://twitter.com/jaggedsoft)
 
 [![NPM](https://nodei.co/npm/node-binance-api.png?compact=true)](https://npmjs.org/package/node-binance-api)
 
-[![Build Status](https://travis-ci.org/jaggedsoft/node-binance-api.svg?branch=master&style=flat-square)](https://travis-ci.org/jaggedsoft/node-binance-api)
-[![Coverage Status](https://coveralls.io/repos/github/tdeineka/node-binance-us-api/badge.svg?branch=master&style=flat-square)](https://coveralls.io/github/tdeineka/node-binance-us-api)
-[![CodeCov](https://codecov.io/gh/jaggedsoft/node-binance-api/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/github/jaggedsoft/node-binance-api/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/996757cec66542c0a64fca2b4cf8a936)](https://www.codacy.com/app/dmzoneill/node-binance-api?utm_source=github.com&utm_medium=referral&utm_content=jaggedsoft/node-binance-api&utm_campaign=Badge_Coverage)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/996757cec66542c0a64fca2b4cf8a936)](https://www.codacy.com/app/dmzoneill/node-binance-api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jaggedsoft/node-binance-api&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/jaggedsoft/node-binance-api.svg?branch=master&style=flat-square)](https://travis-ci.org/jaggedsoft/node-binance-api) [![Coverage Status](https://coveralls.io/repos/github/jaggedsoft/node-binance-api/badge.svg?branch=master&style=flat-square)](https://coveralls.io/github/jaggedsoft/node-binance-api) [![CodeCov](https://codecov.io/gh/jaggedsoft/node-binance-api/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/github/jaggedsoft/node-binance-api/) <!-- [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/996757cec66542c0a64fca2b4cf8a936)](https://www.codacy.com/app/jaggedsoft/node-binance-api?utm_source=github.com&utm_medium=referral&utm_content=jaggedsoft/node-binance-api&utm_campaign=Badge_Coverage) --> [![Codacy Grade](https://api.codacy.com/project/badge/Grade/996757cec66542c0a64fca2b4cf8a936)](https://www.codacy.com/app/jaggedsoft/node-binance-api)
+# Node Binance API
+This project is designed to help you make your own projects that interact with the [Binance API](https://github.com/binance-exchange/binance-official-api-docs). You can stream candlestick chart data, market depth, or use other advanced features such as setting stop losses and iceberg orders. This project seeks to have complete API coverage including WebSockets. Supporting Promises, Margin, Futures and OCO.
 
-# Node Binance.US API
-This project is designed to help you make your own projects that interact with the [Binance API](https://github.com/binance-exchange/binance-official-api-docs). You can stream candlestick chart data, market depth, or use other advanced features such as setting stop losses and iceberg orders. This project seeks to have complete API coverage including WebSockets.
+<b><p align="center">
+  <a href="#binance-futures-api">Futures API</a> •
+  <a href="#binance-api-spot-trading">Spot Trading API</a> •
+  <a href="#websockets-implementation">WebSockets</a> •
+  <a href="#binance-margin-api">Margin API</a> •
+  <a href="#troubleshooting">Troubleshooting</a> •
+  <a href="https://github.com/jaggedsoft/node-binance-api/tree/master/examples">Examples</a> •
+  <a href="https://github.com/jaggedsoft/node-binance-api/releases">Changelog</a> •
+  <a href="https://t.me/binance_api_english">Support</a>
+</p></b>
+
 
 #### Installation
 ```
-npm install node-binance-us-api --save
+npm install node-binance-api --save
 ```
 
 #### Getting started
 ```javascript
-const binance = require('node-binance-us-api')().options({
+const Binance = require('node-binance-api');
+const binance = new Binance({
   APIKEY: '<key>',
-  APISECRET: '<secret>',
-  useServerTime: true // If you get timestamp errors, synchronize to server time at startup
+  APISECRET: '<secret>'
 });
+```
+
+# Binance Futures API
+
+#### Get Futures Positions
+```js
+console.info( await binance.futuresPositionRisk() );
+```
+<details>
+ <summary>View Example</summary>
+
+```js
+let position_data = await binance.futuresPositionRisk(), markets = Object.keys( position_data );
+for ( let market of markets ) {
+  let obj = position_data[market], size = Number( obj.positionAmt );
+  if ( size == 0 ) continue;
+  console.info( `${leverage}x\t${market}\t${obj.unRealizedProfit}` );
+  //console.info( obj ); //positionAmt entryPrice markPrice unRealizedProfit liquidationPrice leverage marginType isolatedMargin isAutoAddMargin maxNotionalValue
+}
+```
+</details>
+
+#### Futures Account Balances & Positions
+```js
+console.info( await binance.futuresAccount() );
+```
+
+#### Futures Balances
+```js
+console.info( await binance.futuresBalance() );
+```
+
+#### Futures Market Buy
+```js
+console.info( await binance.futuresMarketBuy( 'BNBUSDT', 5 ) );
+```
+
+#### Futures Market Sell
+```js
+console.info( await binance.futuresMarketSell( 'TRXUSDT', 1 ) );
+```
+
+#### Futures Limit Buy
+```js
+console.info( await binance.futuresBuy( 'BTCUSDT', 0.1, 8222 ) );
+```
+
+#### Futures Limit Sell
+```js
+console.info( await binance.futuresSell( 'BTCUSDT', 0.5, 11111 ) );
+```
+
+#### Adjust Leverage (1-125x)
+```js
+console.info( await binance.futuresLeverage( 'ETHUSDT', 50 ) );
+```
+
+#### Adjust Margin Type (ISOLATED, CROSSED)
+```js
+console.info( await binance.futuresMarginType( 'BTCUSDT', 'ISOLATED' ) );
+```
+
+#### Adjust Position Margin
+```js
+// Type: 1: Add postion margin，2: Reduce postion margin
+console.info( await binance.futuresPositionMargin( "TRXUSDT", amount, type ) );
+```
+
+#### Futures Prices
+```js
+console.info( await binance.futuresPrices() );
+```
+
+```js
+console.info( await binance.futuresTime() );
+console.info( await binance.futuresExchangeInfo() );
+console.info( await binance.futuresCandles( "TRXUSDT", "1m" ) );
+console.info( await binance.futuresDepth( "ADAUSDT" ) );
+console.info( await binance.futuresQuote() );
+console.info( await binance.futuresQuote( "BCHUSDT" ) );
+console.info( await binance.futuresDaily() );
+console.info( await binance.futuresOpenInterest( "BTCUSDT" ) );
+console.info( await binance.futuresMarkPrice() );
+console.info( await binance.futuresMarkPrice( "ETHUSDT" ) );
+console.info( await binance.futuresTrades( "LTCUSDT" ) );
+console.info( await binance.futuresAggTrades( "XTZUSDT" ) );
+console.info( await binance.futuresLiquidationOrders() );
+console.info( await binance.futuresFundingRate() );
+console.info( await binance.futuresHistoricalTrades( "XMRUSDT" ) );
+console.info( await binance.futuresLeverageBracket( "LINKUSDT" ) );
+console.info( await binance.futuresIncome() );
+console.info( await binance.futuresCancelAll( "BTCUSDT" ) );
+console.info( await binance.futuresCancel( "BTCUSDT", {orderId: "1025137386"} ) );
+console.info( await binance.futuresOrderStatus( "BTCUSDT", {orderId: "1025137386"} ) );
+console.info( await binance.futuresOpenOrders() );
+console.info( await binance.futuresOpenOrders( "BTCUSDT" ) );
+console.info( await binance.futuresAllOrders() );
+console.info( await binance.futuresAllOrders( "BTCUSDT" ) );
+console.info( await binance.futuresUserTrades( "BTCUSDT" ) );
+console.info( await binance.futuresGetDataStream() );
+console.info( await binance.futuresPositionMarginHistory( "TRXUSDT" ) );
+// Still in development: Futures WebSockets & Batch orders
+```
+
+# Binance API (Spot Trading)
+
+#### Getting latest price of all symbols
+```javascript
+let ticker = await binance.prices();
+console.info(`Price of BNB: ${ticker.BNBUSDT}`);
 ```
 
 #### Getting latest price of a symbol
 ```js
 binance.prices('BNBBTC', (error, ticker) => {
-  console.log("Price of BNB: ", ticker.BNBBTC);
-});
-```
-
-#### Getting latest price of all symbols
-```javascript
-binance.prices((error, ticker) => {
-  console.log("prices()", ticker);
-  console.log("Price of BTC: ", ticker.BTCUSDT);
+  console.info("Price of BNB: ", ticker.BNBBTC);
 });
 ```
 <details>
@@ -114,8 +219,8 @@ binance.prices((error, ticker) => {
 ```javascript
 binance.balance((error, balances) => {
   if ( error ) return console.error(error);
-  console.log("balances()", balances);
-  console.log("ETH balance: ", balances.ETH.available);
+  console.info("balances()", balances);
+  console.info("ETH balance: ", balances.ETH.available);
 });
 // If you have problems with this function,
 // see Troubleshooting at the bottom of this page.
@@ -181,7 +286,7 @@ binance.balance((error, balances) => {
 #### Getting bid/ask prices for a symbol
 ```js
 binance.bookTickers('BNBBTC', (error, ticker) => {
-  console.log("bookTickers", ticker);
+  console.info("bookTickers", ticker);
 });
 ```
 
@@ -204,8 +309,8 @@ binance.bookTickers('BNBBTC', (error, ticker) => {
 #### Getting bid/ask prices for all symbols
 ```js
 binance.bookTickers((error, ticker) => {
-  console.log("bookTickers()", ticker);
-  console.log("Price of BNB: ", ticker.BNBBTC);
+  console.info("bookTickers()", ticker);
+  console.info("Price of BNB: ", ticker.BNBBTC);
 });
 ```
 
@@ -533,7 +638,7 @@ binance.bookTickers((error, ticker) => {
 #### Get all bid/ask prices
 ```javascript
 binance.bookTickers((error, ticker) => {
-  console.log("bookTickers", ticker);
+  console.info("bookTickers", ticker);
 });
 ```
 <details>
@@ -856,7 +961,7 @@ binance.bookTickers((error, ticker) => {
 #### Get market depth for a symbol
 ```javascript
 binance.depth("BNBBTC", (error, depth, symbol) => {
-  console.log(symbol+" market depth", depth);
+  console.info(symbol+" market depth", depth);
 });
 ```
 <details>
@@ -1071,7 +1176,7 @@ market depth for BNBBTC
 
 #### Placing a LIMIT order
 ```javascript
-var quantity = 1, price = 0.069;
+let quantity = 1, price = 0.069;
 binance.buy("ETHBTC", quantity, price);
 binance.sell("ETHBTC", quantity, price);
 ```
@@ -1079,17 +1184,17 @@ binance.sell("ETHBTC", quantity, price);
 #### Placing a MARKET order
 ```javascript
 // These orders will be executed at current market price.
-var quantity = 1;
+let quantity = 1;
 binance.marketBuy("BNBBTC", quantity);
 binance.marketSell("ETHBTC", quantity);
 ```
 
 #### LIMIT order with callback
 ```javascript
-var quantity = 5, price = 0.00402030;
+let quantity = 5, price = 0.00402030;
 binance.buy("BNBETH", quantity, price, {type:'LIMIT'}, (error, response) => {
-  console.log("Limit Buy response", response);
-  console.log("order id: " + response.orderId);
+  console.info("Limit Buy response", response);
+  console.info("order id: " + response.orderId);
 });
 ```
 
@@ -1116,10 +1221,10 @@ Limit Buy response {
 
 #### Chaining orders together
 ```js
-var quantity = 1;
+let quantity = 1;
 binance.marketBuy("BNBBTC", quantity, (error, response) => {
-  console.log("Market Buy response", response);
-  console.log("order id: " + response.orderId);
+  console.info("Market Buy response", response);
+  console.info("order id: " + response.orderId);
   // Now you can limit sell with a stop loss, etc.
 });
 ```
@@ -1160,36 +1265,36 @@ binance.sell("ETHBTC", quantity, price, {stopPrice: stopPrice, type: type});
 #### Placing an ICEBERG order
 ```javascript
 // Iceberg orders are intended to conceal the order quantity.
-var quantity = 1;
-var price = 0.069;
+let quantity = 1;
+let price = 0.069;
 binance.sell("ETHBTC", quantity, price, {icebergQty: 10});
 ```
 
 #### Cancel an order
 ```javascript
 binance.cancel("ETHBTC", orderid, (error, response, symbol) => {
-  console.log(symbol+" cancel response:", response);
+  console.info(symbol+" cancel response:", response);
 });
 ```
 
 #### Cancel all open orders
 ```js
 binance.cancelOrders("XMRBTC", (error, response, symbol) => {
-  console.log(symbol+" cancel response:", response);
+  console.info(symbol+" cancel response:", response);
 });
 ```
 
 #### Get open orders for a symbol
 ```javascript
 binance.openOrders("ETHBTC", (error, openOrders, symbol) => {
-  console.log("openOrders("+symbol+")", openOrders);
+  console.info("openOrders("+symbol+")", openOrders);
 });
 ```
 
 #### Get list of all open orders
 ```javascript
 binance.openOrders(false, (error, openOrders) => {
-  console.log("openOrders()", openOrders);
+  console.info("openOrders()", openOrders);
 });
 ```
 
@@ -1197,14 +1302,14 @@ binance.openOrders(false, (error, openOrders) => {
 ```javascript
 let orderid = "7610385";
 binance.orderStatus("ETHBTC", orderid, (error, orderStatus, symbol) => {
-  console.log(symbol+" order status:", orderStatus);
+  console.info(symbol+" order status:", orderStatus);
 });
 ```
 
 #### Trade history
 ```javascript
 binance.trades("SNMBTC", (error, trades, symbol) => {
-  console.log(symbol+" trade history", trades);
+  console.info(symbol+" trade history", trades);
 });
 ```
 <details>
@@ -1237,24 +1342,24 @@ binance.trades("SNMBTC", (error, trades, symbol) => {
 #### Get all account orders; active, canceled, or filled.
 ```javascript
 binance.allOrders("ETHBTC", (error, orders, symbol) => {
-  console.log(symbol+" orders:", orders);
+  console.info(symbol+" orders:", orders);
 });
 ```
 
 #### Get dust log
 ```javascript
 binance.dustLog((error, dustlog) => {
-  console.log(dustlog);
+  console.info(dustlog);
 })
 ```
 
 #### Get 24hr ticker price change statistics for all symbols
 ```javascript
 binance.prevDay(false, (error, prevDay) => {
-  // console.log(prevDay); // view all data
+  // console.info(prevDay); // view all data
   for ( let obj of prevDay ) {
     let symbol = obj.symbol;
-    console.log(symbol+" volume:"+obj.volume+" change: "+obj.priceChangePercent+"%");
+    console.info(symbol+" volume:"+obj.volume+" change: "+obj.priceChangePercent+"%");
   }
 });
 ```
@@ -1262,8 +1367,8 @@ binance.prevDay(false, (error, prevDay) => {
 #### Get 24hr ticker price change statistics for a symbol
 ```javascript
 binance.prevDay("BNBBTC", (error, prevDay, symbol) => {
-  console.log(symbol+" previous day:", prevDay);
-  console.log("BNB change since yesterday: "+prevDay.priceChangePercent+"%")
+  console.info(symbol+" previous day:", prevDay);
+  console.info("BNB change since yesterday: "+prevDay.priceChangePercent+"%")
 });
 ```
 
@@ -1274,10 +1379,10 @@ Optional parameters: limit (max/default 500), startTime, endTime.
 ```javascript
 // Intervals: 1m,3m,5m,15m,30m,1h,2h,4h,6h,8h,12h,1d,3d,1w,1M
 binance.candlesticks("BNBBTC", "5m", (error, ticks, symbol) => {
-  console.log("candlesticks()", ticks);
+  console.info("candlesticks()", ticks);
   let last_tick = ticks[ticks.length - 1];
   let [time, open, high, low, close, volume, closeTime, assetVolume, trades, buyBaseVolume, buyAssetVolume, ignored] = last_tick;
-  console.log(symbol+" last close: "+close);
+  console.info(symbol+" last close: "+close);
 }, {limit: 500, endTime: 1514764800000});
 ```
 
@@ -1290,11 +1395,11 @@ This function pulls existing chart data before connecting to the WebSocket, and 
 binance.websockets.chart("BNBBTC", "1m", (symbol, interval, chart) => {
   let tick = binance.last(chart);
   const last = chart[tick].close;
-  console.log(chart);
+  console.info(chart);
   // Optionally convert 'chart' object to array:
   // let ohlc = binance.ohlc(chart);
-  // console.log(symbol, ohlc);
-  console.log(symbol+" last price: "+last)
+  // console.info(symbol, ohlc);
+  console.info(symbol+" last price: "+last)
 });
 ```
 
@@ -1363,13 +1468,13 @@ binance.websockets.chart("BNBBTC", "1m", (symbol, interval, chart) => {
 binance.websockets.candlesticks(['BNBBTC'], "1m", (candlesticks) => {
   let { e:eventType, E:eventTime, s:symbol, k:ticks } = candlesticks;
   let { o:open, h:high, l:low, c:close, v:volume, n:trades, i:interval, x:isFinal, q:quoteVolume, V:buyVolume, Q:quoteBuyVolume } = ticks;
-  console.log(symbol+" "+interval+" candlestick update");
-  console.log("open: "+open);
-  console.log("high: "+high);
-  console.log("low: "+low);
-  console.log("close: "+close);
-  console.log("volume: "+volume);
-  console.log("isFinal: "+isFinal);
+  console.info(symbol+" "+interval+" candlestick update");
+  console.info("open: "+open);
+  console.info("high: "+high);
+  console.info("low: "+low);
+  console.info("close: "+close);
+  console.info("volume: "+volume);
+  console.info("isFinal: "+isFinal);
 });
 ```
 
@@ -1377,14 +1482,14 @@ binance.websockets.candlesticks(['BNBBTC'], "1m", (candlesticks) => {
 ```javascript
 binance.websockets.trades(['BNBBTC', 'ETHBTC'], (trades) => {
   let {e:eventType, E:eventTime, s:symbol, p:price, q:quantity, m:maker, a:tradeId} = trades;
-  console.log(symbol+" trade update. price: "+price+", quantity: "+quantity+", maker: "+maker);
+  console.info(symbol+" trade update. price: "+price+", quantity: "+quantity+", maker: "+maker);
 });
 ```
 
 #### Get miniTicker via WebSocket
 ```js
 binance.websockets.miniTicker(markets => {
-  console.log(markets);
+  console.info(markets);
 });
 ```
 
@@ -1423,12 +1528,12 @@ binance.websockets.miniTicker(markets => {
 ```js
 // For all symbols:
 binance.websockets.prevDay(false, (error, response) => {
-  console.log(response);
+  console.info(response);
 });
 
 // For a specific symbol:
 binance.websockets.prevDay('BNBBTC', (error, response) => {
-  console.log(response);
+  console.info(response);
 });
 ```
 
@@ -1466,8 +1571,8 @@ binance.websockets.prevDay('BNBBTC', (error, response) => {
 ```javascript
 binance.websockets.depth(['BNBBTC'], (depth) => {
   let {e:eventType, E:eventTime, s:symbol, u:updateId, b:bidDepth, a:askDepth} = depth;
-  console.log(symbol+" market depth update");
-  console.log(bidDepth, askDepth);
+  console.info(symbol+" market depth update");
+  console.info(bidDepth, askDepth);
 });
 ```
 
@@ -1476,12 +1581,12 @@ binance.websockets.depth(['BNBBTC'], (depth) => {
 binance.websockets.depthCache(['BNBBTC'], (symbol, depth) => {
   let bids = binance.sortBids(depth.bids);
   let asks = binance.sortAsks(depth.asks);
-  console.log(symbol+" depth cache update");
-  console.log("bids", bids);
-  console.log("asks", asks);
-  console.log("best bid: "+binance.first(bids));
-  console.log("best ask: "+binance.first(asks));
-  console.log("last updated: " + new Date(depth.eventTime));
+  console.info(symbol+" depth cache update");
+  console.info("bids", bids);
+  console.info("asks", asks);
+  console.info("best bid: "+binance.first(bids));
+  console.info("best ask: "+binance.first(asks));
+  console.info("last updated: " + new Date(depth.eventTime));
 });
 ```
 
@@ -1523,35 +1628,35 @@ bids { '0.00025203': 0.201624,
 #### Get Deposit Address
 ```js
 binance.depositAddress("XMR", (error, response) => {
-  console.log(response);
+  console.info(response);
 });
 ```
 
 #### Get All Deposit History
 ```js
 binance.depositHistory((error, response) => {
-  console.log(response);
+  console.info(response);
 });
 ```
 
 #### Get Deposit History for a specific symbol
 ```js
 binance.depositHistory((error, response) => {
-  console.log(response);
+  console.info(response);
 }, "VEN");
 ```
 
 #### Get All Withdraw History
 ```js
 binance.withdrawHistory((error, response) => {
-  console.log(response);
+  console.info(response);
 });
 ```
 
 #### Get Withdraw History for a specific symbol
 ```js
 binance.withdrawHistory((error, response) => {
-  console.log(response);
+  console.info(response);
 }, "BTC");
 ```
 
@@ -1564,69 +1669,58 @@ let amount = 0.1;
 binance.withdraw("XMR", address, amount, addressTag);
 ```
 
-#### Withdraw with Callback
-```js
-binance.withdraw("ETH", "0x1d2034348c851ea29c7d03731c7968a5bcc91564", 1, false, (error, response) => {
-  console.log(response);
-});
-```
-
 #### Withdraw
 ```js
 binance.withdraw("BTC", "1C5gqLRs96Xq4V2ZZAR1347yUCpHie7sa", 0.2);
 ```
 
-#### Withdraw with custom name
-```js
-// let name = false // Falsy value won't save address to address book
-let name = 'My Withdrawal Address'
-binance.withdraw("BTC", "1C5gqLRs96Xq4V2ZZAR1347yUCpHie7sa", 0.2, undefined, name)
-```
-# Margin
-Margin is newly implemented and a work in progress. 
-For now:
+# Binance Margin API
 
 #### Transfer from Main account to Margin account
 ```js
 binance.mgTransferMainToMargin(asset, amount, (error, response) => {
-    if (error) {
-      // error from Binance endpoint
-    } else {
-      // should get a tranId
-    }
+    if ( error ) return console.warn(error);
+    // Success! Transaction ID: response.tranId
 });
 
 ```
 #### Transfer from Margin account to Main account
 ```js
 binance.mgTransferMarginToMain(asset, amount, (error, response) => {
-    if (error) {
-      // error from Binance endpoint
-    } else {
-      // should get a tranId
-    }
+    if ( error ) return console.warn(error);
+    // Success! Transaction ID: response.tranId
+});
+```
+
+#### Get maximum transfer-out amount from Margin account to Main account
+```js
+binance.maxTransferable(asset, (error, response) => {
+    if ( error ) return console.warn(error);
+    console.info(`Maximum transfer-out amount: ${response.amount}`);
+});
+```
+
+#### Get maximum borrow amount
+```js
+binance.maxBorrowable(asset, (error, response) => {
+    if ( error ) return console.warn(error);
+    console.info(`Maximum borrow amount: ${response.amount}`);
 });
 ```
 
 #### Borrow from margin account
 ```js
 binance.mgBorrow(asset, amount, (error, response) => {
-    if (error) {
-      // error from Binance endpoint
-    } else {
-      // should get a tranId
-    }
+    if ( error ) return console.warn(error);
+    // Success! Transaction ID: response.tranId
 });
 ```
 
 #### Repay margin account
 ```js
 binance.mgRepay(asset, amount, (error, response) => {
-    if (error) {
-      // error from Binance endpoint
-    } else {
-      // should get a tranId
-    }
+    if ( error ) return console.warn(error);
+    // Success! Transaction ID: response.tranId
 });
 ```
 
@@ -1635,75 +1729,54 @@ Instead of `binance.buy()` use `binance.mgBuy()` and instead of `binance.sell()`
 
 For market orders use `binance.mgMarketBuy()` and `binance.mgMarketSell()`.
 
+For order operations, use `binance.mgCancel()`, `binance.mgCancelOrders()`, `binance.mgAllOrders()`, `binance.openOrders()`, `binance.mgOrderStatus()`.
+
 Usage and callbacks are the same as the 'regular account' counterparts.
 
-#### Cancel a margin order
+#### Margin account details
 ```javascript
-binance.mgCancel("ETHBTC", orderid, (error, response, symbol) => {
-  console.log(symbol+" cancel response:", response);
-});
+binance.mgAccount((error, response) => {
+   if ( error ) return console.warn(error);
+   console.info("Account details response:", response)
+})
 ```
+<details>
+  <summary>View response</summary>
+  ```
+    data {
+      borrowEnabled: true,
+      marginLevel: '999.00000000',
+      totalAssetOfBtc: '0.00000003',
+      totalLiabilityOfBtc: '0.00000000',
+      totalNetAssetOfBtc: '0.00000003',
+      tradeEnabled: true,
+      transferEnabled: true,
+      userAssets: [
+        {
+          asset: 'MATIC',
+          borrowed: '0.00000000',
+          free: '0.00000000',
+          interest: '0.00000000',
+          locked: '0.00000000',
+          netAsset: '0.00000000'
+        }
+      ]
+    }
+  ```
+</details>
 
-#### Cancel all open margin orders
-```js
-binance.mgCancelOrders("XMRBTC", (error, response, symbol) => {
-  console.log(symbol+" cancel response:", response);
-});
-```
-
-#### Check a margin order's status
-```javascript
-let orderid = "7610385";
-binance.mgOrderStatus("ETHBTC", orderid, (error, orderStatus, symbol) => {
-  console.log(symbol+" order status:", orderStatus);
-});
-```
-
-
-#### [Advanced Examples](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md)
-> [exchangeInfo: Pull minimum order size, quantity, etc](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#exchangeinfo-pull-minimum-order-size-quantity-etc)\
-[Clamp order quantities to required amounts via minQty, minNotional, stepSize when placing orders](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#clamp-order-quantities-to-required-amounts-via-minqty-minnotional-stepsize-when-placing-orders)\
-[Show API Rate limits](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#show-api-rate-limits)\
-[Connect to all WebSockets at once](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#connect-to-all-websockets-at-once-thanks-keith1024)\
-[Get last order for a symbol](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#get-last-order-for-a-symbol)\
-[newOrderRespType example](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#neworderresptype-example-when-placing-orders)\
-[Recent Trades (historicalTrades, recentTrades, aggTrades functions)](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#recent-trades-historicaltrades-recenttrades-aggtrades-functions)\
-[Terminate WebSocket connections](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#terminate-websocket-connections)\
-[User Data: Account Balance Updates, Trade Updates, New Orders, Filled Orders, Cancelled Orders via WebSocket](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#user-data-account-balance-updates-trade-updates-new-orders-filled-orders-cancelled-orders-via-websocket)
-[Margin User Data: Account Balance Updates, Trade Updates, New Orders, Filled Orders, Cancelled Orders via WebSocket](https://github.com/tdeineka/node-binance-us-api/blob/master/examples/advanced.md#margin-user-data-account-balance-updates-trade-updates-new-orders-filled-orders-cancelled-orders-via-websocket)
-
-
-### Proxy Support
-For the standard REST API the https_proxy or socks_proxy variable is honoured
-*NOTE* proxy package has no dns name support, please use proxy IP address
-
-**Linux**
-```bash
-export https_proxy=http://ip:port
-#export socks_proxy=socks://ip:port
-# run your app
-```
-
-**Windows**
-```bash
-set https_proxy=http://ip:port
-#set socks_proxy=socks://ip:port
-# run your app
-```
-
-For web sockets currently only the socks method is functional at this time
-
-**linux**
-```bash
-export socks_proxy=socks://ip:port
-# run your app
-```
-
-**windows**
-```bash
-set socks_proxy=socks://ip:port
-# run your app
-```
+#### [Advanced Examples](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md)
+> [exchangeInfo: Pull minimum order size, quantity, etc](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#exchangeinfo-pull-minimum-order-size-quantity-etc)\
+[Clamp order quantities to required amounts via minQty, minNotional, stepSize when placing orders](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#clamp-order-quantities-to-required-amounts-via-minqty-minnotional-stepsize-when-placing-orders)\
+[Show API Rate limits](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#show-api-rate-limits)\
+[Connect to all WebSockets at once](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#connect-to-all-websockets-at-once-thanks-keith1024)\
+[Get last order for a symbol](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#get-last-order-for-a-symbol)\
+[newOrderRespType example](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#neworderresptype-example-when-placing-orders)\
+[Recent Trades (historicalTrades, recentTrades, aggTrades functions)](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#recent-trades-historicaltrades-recenttrades-aggtrades-functions)\
+[Terminate WebSocket connections](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#terminate-websocket-connections)\
+[User Data: Account Balance Updates, Trade Updates, New Orders, Filled Orders, Cancelled Orders via WebSocket](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#user-data-account-balance-updates-trade-updates-new-orders-filled-orders-cancelled-orders-via-websocket)
+[Margin User Data: Account Balance Updates, Trade Updates, New Orders, Filled Orders, Cancelled Orders via WebSocket](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#margin-user-data-account-balance-updates-trade-updates-new-orders-filled-orders-cancelled-orders-via-websocket)
+[Asynchronous Syntax Options](https://github.com/jaggedsoft/node-binance-api/blob/master/examples/advanced.md#asynchronous-syntax-options)
 
 ### Troubleshooting
 Verify that your system time is correct. If you have any suggestions don't hesitate to file an issue.
@@ -1724,25 +1797,21 @@ binance.options({
 
 Problems getting your balance? Wrap the entry point of your application in useServerTime:
 ```js
-binance.useServerTime(function() {
+binance.useServerTime(() => {
 	binance.balance((error, balances) => {
 		if ( error ) return console.error(error);
-		console.log("balances()", balances);
-		console.log("BNB balance: ", balances.BNB.available);
+		console.info("balances()", balances);
+		console.info("BNB balance: ", balances.BNB.available);
 	});
 });
 ```
 
-Thank you to all contributors: dbvcode, bmino, dmzoneill, dmitriz, keith1024, pavlovdog, usama33, yanislk, learnathoner, vaielab, nickreese, Tuitio, grandmore, itnok, CollinEstes, sethyx, mstijak, MadDeveloper, balthazar, bitoiu, matthewwoop, robaleman, hems and others!
+> ### For support go to [Telegram](https://t.me/binance_api_english)
 
-> # ⚠️ Binance no longer offers support for API projects.
-> ## No support is offered. No questions will be answered. Pull requests are still welcome.
+***Thank you to all contributors:*** JasonMcz, kirosc, abou7mied, jmacioszek, DoobieD, Eluvade, dbvcode, bmino, dmzoneill, dmitriz, keith1024, pavlovdog, usama33, yanislk, learnathoner, vaielab, nickreese, Tuitio, grandmore, itnok, CollinEstes, sethyx, mstijak, MadDeveloper, balthazar, bitoiu, matthewwoop, robaleman, hems and others!
 
-
-## Stargazers over time
-
+![Downloads](https://img.shields.io/npm/dt/node-binance-api.svg?style=for-the-badge&maxAge=86400) ![Stars](https://img.shields.io/github/stars/jaggedsoft/node-binance-api.svg?style=for-the-badge&label=Stars) ![Contributors](https://img.shields.io/github/contributors/jaggedsoft/node-binance-api.svg?style=for-the-badge&maxAge=86400)
 [![Stargazers over time](https://starcharts.herokuapp.com/jaggedsoft/node-binance-api.svg)](https://starcharts.herokuapp.com/jaggedsoft/node-binance-api)
 
 [![Views](http://hits.dwyl.io/jaggedsoft/node-binance-api.svg)](http://hits.dwyl.io/jaggedsoft/node-binance-api)
 [![jaggedsoft on Twitter](https://img.shields.io/twitter/follow/jaggedsoft.svg?style=social)](https://twitter.com/jaggedsoft)
-[![Chartaholic on Twitter](https://img.shields.io/twitter/follow/Chartaholic.svg?style=social)](https://twitter.com/Chartaholic)

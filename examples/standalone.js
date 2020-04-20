@@ -3,7 +3,7 @@ const axios = require( 'axios' );
 async function bookTicker( symbol = false ) {
     return new Promise( ( resolve, reject ) => {
         params = symbol ? `?symbol=${symbol}` : '';
-        axios.get( 'https://api.binance.us/api/v3/ticker/bookTicker' + params )
+        axios.get( 'https://api.binance.com/api/v3/ticker/bookTicker' + params )
             .then( function ( response ) {
                 resolve( response.data );
             } )
