@@ -1,6 +1,6 @@
 /* ============================================================
- * node-binance-api
- * https://github.com/jaggedsoft/node-binance-api
+ * node-binance-ua-api
+ * https://github.com/tdeineka/node-binance-us-api
  * ============================================================
  * Copyright 2017-, Jon Eyrick
  * Released under the MIT License

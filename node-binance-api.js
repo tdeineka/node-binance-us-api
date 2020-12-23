@@ -1,11 +1,11 @@
 /* ============================================================
- * node-binance-api
- * https://github.com/jaggedsoft/node-binance-api
+ * node-binance-us-api
+ * https://github.com/tdeineka/node-binance-us-api
  * ============================================================
  * Copyright 2017-, Jon Eyrick
  * Released under the MIT License
  * ============================================================
- * @module jaggedsoft/node-binance-api
+ * @module tdeineka/node-binance-us-api
  * @return {object} instance to class object */
 let api = function Binance( options = {} ) {
     //'use strict'; // eslint-disable-line no-unused-expressions
@@ -26,7 +26,7 @@ let api = function Binance( options = {} ) {
     let fapi = 'https://fapi.binance.us/fapi/';
     let stream = 'wss://stream.binance.us:9443/ws/';
     let combineStream = 'wss://stream.binance.us:9443/stream?streams=';
-    const userAgent = 'Mozilla/4.0 (compatible; Node Binance API)';
+    const userAgent = 'Mozilla/4.0 (compatible; Node Binance.US API)';
     const contentType = 'application/x-www-form-urlencoded';
     Binance.subscriptions = {};
     Binance.depthCache = {};
@@ -1796,6 +1796,10 @@ let api = function Binance( options = {} ) {
             }
         },
 
+        fiatWithdrawHistory: async ( params = {} ) => {
+          return promiseRequest('v1/fiatpayment/query/withdraw/history', params, { base:sapi, type:'SIGNED'});
+        },
+
         /**
         * Get the deposit history
         * @param {function} callback - the callback function
@@ -1818,6 +1822,10 @@ let api = function Binance( options = {} ) {
             } else {
                 signedRequest( wapi + 'v3/depositHistory.html', params, callback );
             }
+        },
+
+        fiatDepositHistory: async ( params = {} ) => {
+          return promiseRequest('v1/fiatpayment/query/deposit/history', params, { base:sapi, type:'SIGNED'});
         },
 
         /**
